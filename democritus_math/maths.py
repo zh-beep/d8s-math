@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-
 import collections
 import math
-import os
-import sys
-from typing import Any, Iterable, Tuple
+from typing import Any, Iterable, Tuple, List, Union, NamedTuple
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
-import decorators
-from typings import ListOfInts, ListOfLists, ListOfStrs, StrOrNumber, integer_tupleType
+from .maths_temp_utils import arguments_as_decimals
+
+
+class integer_tupleType(NamedTuple):
+    base: int
+    digits: Tuple[int, ...]
+
 
 # TODO: write prime factorization function
 # TODO: write a function to determine if a number is prime or not
@@ -28,7 +28,7 @@ from typings import ListOfInts, ListOfLists, ListOfStrs, StrOrNumber, integer_tu
 integer_tuple = collections.namedtuple('integer_tuple', ['base', 'digits'])
 
 
-def fibonacci_sequence(n: int) -> ListOfInts:
+def fibonacci_sequence(n: int) -> List[int]:
     """Return the first n digits of the fibonacci sequence."""
     nums = [fibonacci(i) for i in range(n)]
     return nums
@@ -73,9 +73,8 @@ def number_furthest(a, b, target):
 def cartesian_product(a: Any, *args: Any, repeat: int = 1):
     """."""
     import itertools
-    from lists import listify
 
-    return listify(itertools.product(a, *args, repeat=repeat))
+    return list(itertools.product(a, *args, repeat=repeat))
 
 
 def sympy_symbol(symbol_name: str):
@@ -85,7 +84,7 @@ def sympy_symbol(symbol_name: str):
     return sympy.symbols(symbol_name)
 
 
-def equation_solve(equation: str, symbols: ListOfStrs):
+def equation_solve(equation: str, symbols: List[str]):
     """."""
     import sympy
 
@@ -106,7 +105,7 @@ def expression_explore(expression: str, symbol: str, start: int, end: int, step:
         yield (i, equation_solve(equation, [symbol]))
 
 
-def _hot_or_cold_encoder(items: list, default_value: int, changed_value: int, *, reverse: bool = False) -> ListOfLists:
+def _hot_or_cold_encoder(items: list, default_value: int, changed_value: int, *, reverse: bool = False) -> List[list]:
     results = []
     unique_items = list(set(items))
     sorted_items = sorted(unique_items, reverse=reverse)
@@ -121,11 +120,11 @@ def _hot_or_cold_encoder(items: list, default_value: int, changed_value: int, *,
     return results
 
 
-def one_cold_encode(items: list, *, reverse: bool = False) -> ListOfLists:
+def one_cold_encode(items: list, *, reverse: bool = False) -> List[list]:
     return _hot_or_cold_encoder(items, 1, 0, reverse=reverse)
 
 
-def one_hot_encode(items: list, *, reverse: bool = False) -> ListOfLists:
+def one_hot_encode(items: list, *, reverse: bool = False) -> List[list]:
     return _hot_or_cold_encoder(items, 0, 1, reverse=reverse)
 
 
@@ -141,8 +140,8 @@ def is_integer_tuple(possible_integer_tuple: Any) -> bool:
 
 
 # TODO: make it more clear what values are expected as inputs to decimal_to_gray_code and gray_code_to_decimal -> decimal integers or binary?
-@decorators.arguments_as_decimals
-def decimal_to_gray_code(num: StrOrNumber) -> integer_tupleType:
+@arguments_as_decimals
+def decimal_to_gray_code(num: Union[str, int, float]) -> integer_tupleType:
     """Convert the given number to a gray code. This function was inspired by the code here: https://en.wikipedia.org/wiki/Gray_code#Converting_to_and_from_Gray_code."""
     gray_code = num ^ (num >> 1)
     binary_gray_code = decimal_to_base(gray_code, 2)
@@ -150,7 +149,7 @@ def decimal_to_gray_code(num: StrOrNumber) -> integer_tupleType:
 
 
 # TODO: should this function only take an integer tuple and not a string (e.g. '111') or int which will be intepreted as binary (e.g. 111)
-@decorators.arguments_as_decimals
+@arguments_as_decimals
 def gray_code_to_decimal(num: integer_tupleType) -> int:
     """Convert the given number to a gray code. This function was inspired by the code here: https://en.wikipedia.org/wiki/Gray_code#Converting_to_and_from_Gray_code."""
     mask = num >> 1
@@ -202,7 +201,7 @@ def integer_tuple_to_decimal(integer_tuple: integer_tupleType) -> int:
     return decimal_number
 
 
-def integer_to_decimal(num: StrOrNumber, base: int) -> int:
+def integer_to_decimal(num: Union[str, int, float], base: int) -> int:
     """Convert the number of the given base to a decimal number."""
     number = str(num)
     # TODO: the base is currently limited to numbers between 2 and 36... generalize this so that there are no such limitations
@@ -218,7 +217,7 @@ def _base_converter_init(alphabet):
     return converter
 
 
-def decimal_to_base(decimal_number: StrOrNumber, base: int):
+def decimal_to_base(decimal_number: Union[str, int, float], base: int):
     """Convert the decimal_number to the given base."""
     if base == 1:
         results = [1 for i in range(0, decimal_number)]
@@ -242,7 +241,7 @@ def decimal_to_base(decimal_number: StrOrNumber, base: int):
 
 # # TODO: I don't think the result_as_digit_list argument name is very descriptive; there is probably a better name for that argument
 # def decimal_to_base(
-#     decimal_number: StrOrNumber,
+#     decimal_number: Union[str, int, float],
 #     base: int,
 #     alphabet: str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
 #     result_as_digit_list: bool = False
@@ -330,22 +329,18 @@ def combinations(iterable, length=None):
     """Return all possible combinations of the given length which can be created from the given iterable. If no length is given, we will find all combinations of all lengths for the given iterable."""
     import itertools
 
-    from lists import listify
-
     if length is None:
         combos = []
         for l in range(1, len(iterable) + 1):
             combos.extend(combinations(iterable, length=l))
         return combos
     else:
-        return listify(itertools.combinations(iterable, length))
+        return list(itertools.combinations(iterable, length))
 
 
 def combinations_with_replacement(iterable, length=None):
     """Return all possible combinations of the given length which can be created from the given iterable. If no length is given, we will find all combinations of all lengths for the given iterable."""
     import itertools
-
-    from lists import listify
 
     if length is None:
         combos = []
@@ -353,21 +348,32 @@ def combinations_with_replacement(iterable, length=None):
             combos.extend(combinations_with_replacement(iterable, length=l))
         return combos
     else:
-        return listify(itertools.combinations_with_replacement(iterable, length))
+        return list(itertools.combinations_with_replacement(iterable, length))
+
+
+def prod(iterable):
+    """Get the product of the iterable."""
+    from functools import reduce
+    import operator
+
+    from democritus_strings import string_to_number
+
+    # convert all of the items of the iterable to numbers
+    number_iterable = map(string_to_number, iterable)
+
+    return reduce(operator.mul, number_iterable, 1)
 
 
 def permutations(iterable, length=None):
     """Return all possible permutations of the given iterable. If no length is given, we will find all permutations of all lengths for the given iterable"""
     import itertools
 
-    from lists import listify
-
     if length is None:
         perms = []
         for l in range(1, len(iterable) + 1):
             perms.extend(permutations(iterable, length=l))
     else:
-        perms = listify(itertools.permutations(iterable, length))
+        perms = list(itertools.permutations(iterable, length))
     return perms
 
 
@@ -469,21 +475,12 @@ def percent(ratio):
         raise RuntimeError
 
 
-@decorators.arguments_as_decimals
+@arguments_as_decimals
 def gcd(number1, number2):
     """Return the greatest common divisor."""
     import math
 
     return math.gcd(number1, number2)
-
-
-def product(iterable):
-    """Get the product of the iterable."""
-    from functools import reduce
-
-    from strings import string_to_number
-
-    return reduce(lambda x, y: x * y, string_to_number(iterable))
 
 
 def ratio(number1, number2):

@@ -6,7 +6,6 @@ from democritus_math import (
     cartesian_product,
     sympy_symbol,
     equation_solve,
-    _hot_or_cold_encoder,
     one_cold_encode,
     one_hot_encode,
     is_integer_tuple,
@@ -18,7 +17,6 @@ from democritus_math import (
     decimal_to_roman_numeral,
     integer_tuple_to_decimal,
     integer_to_decimal,
-    _base_converter_init,
     decimal_to_base,
     outer_division,
     outer_product,
@@ -30,8 +28,6 @@ from democritus_math import (
     combinations,
     combinations_with_replacement,
     permutations,
-    _split_fraction,
-    _split_mixed_fraction,
     fraction_simplify,
     remainder,
     floor,
@@ -42,7 +38,6 @@ from democritus_math import (
     dot_product,
     percent,
     gcd,
-    product,
     ratio,
     transpose,
     number_line,
@@ -50,8 +45,11 @@ from democritus_math import (
     fibonacci,
     fibonacci_sequence,
     expression_explore,
+    prod,
 )
-from numbers_wrapper import number_is_approx
+from democritus_math.maths import _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction, _base_converter_init
+
+# from democritus_numbers import number_is_approx
 
 x = sympy_symbol('x')
 y = sympy_symbol('y')
@@ -419,9 +417,9 @@ def test_outer_product_docs_1():
 #     assert permutations('iterable', length=NameConstant) == 'fill'  # fill
 
 
-def test_product_docs_1():
-    assert product([1, 2, 3, 4]) == 24
-    assert product([1, '2', 3, '4']) == 24
+def test_prod_docs_1():
+    assert prod([1, 2, 3, 4]) == 24
+    assert prod([1, '2', 3, '4']) == 24
 
 
 def test_ratio_docs_1():
