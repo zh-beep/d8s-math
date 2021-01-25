@@ -1,5 +1,6 @@
 import collections
 import math
+import numbers
 from typing import Any, Iterable, Tuple, List, Union, NamedTuple
 
 from .maths_temp_utils import arguments_as_decimals
@@ -8,6 +9,9 @@ from .maths_temp_utils import arguments_as_decimals
 class integer_tupleType(NamedTuple):
     base: int
     digits: Tuple[int, ...]
+
+
+StrOrNumberType = Union[str, int, float, integer_tupleType]
 
 
 # TODO: write prime factorization function
@@ -523,3 +527,119 @@ def number_line(value, min_, max_, interval: int = 1):
         number_line_string = '{}{}|{}{}'.format(min_, '.' * length_below_value, '.' * length_above_value, max_)
 
     return number_line_string
+
+
+# start numbers_wrapper
+# TODO: add a decorator to convert first arg to integer
+def number_zero_pad(num: StrOrNumberType, length: StrOrNumberType) -> str:
+    """."""
+    num = int(num)
+    if length < len(str(num)):
+        message = 'The length you provided is shorter than the number. Please provide a length that is at least as long as the given number.'
+        raise ValueError(message)
+
+    zero_padded_number = f'{num}'
+
+    while len(zero_padded_number) < length:
+        zero_padded_number = f'0{zero_padded_number}'
+
+    return zero_padded_number
+
+
+def is_number(item):
+    """Return whether or not the item is a number."""
+    if isinstance(item, str):
+        try:
+            int(item)
+        except ValueError:
+            try:
+                float(item)
+            except ValueError:
+                return False
+            else:
+                return True
+        else:
+            return True
+    else:
+        return isinstance(item, numbers.Number)
+
+
+@arguments_as_decimals
+def number_is_even(number: StrOrNumberType):
+    remainder_two = remainder(number, 2)
+    is_even = remainder_two == 0
+    return is_even
+
+
+@arguments_as_decimals
+def number_is_odd(number: StrOrNumberType):
+    is_even = number_is_even(number)
+    return not is_even
+
+
+def number_is_approx(number, approximate_value, *, relative_tolerance=1e-6):
+    """."""
+    import math
+
+    is_close = math.isclose(number, approximate_value, rel_tol=relative_tolerance)
+    return is_close
+
+
+# TODO: rename this function as `enumerate` is already a python function
+def enumerate_range(range_string, range_split_string: str = '-'):
+    """Enumerate the range specified by the string. For example, `1-3` returns `[1, 2, 3]`."""
+    range_sections = range_string.split(range_split_string)
+    error_message = 'The enumerate_range function expects a string with two integers separated by the character specified by the `range_split_string` argument which can be passed into the enumerate_range function.'
+
+    if len(range_sections) != 2:
+        raise ValueError(error_message)
+
+    try:
+        range_start = int(range_sections[0].strip())
+        range_end = int(range_sections[1].strip())
+    except ValueError:
+        raise ValueError(error_message)
+    else:
+        return [i for i in range(range_start, range_end + 1)]
+
+
+def hex_endiness_swap(hex_string):
+    """Credit to: https://stackoverflow.com/questions/27506474/how-to-byte-swap-a-32-bit-integer-in-python."""
+    import struct
+
+    return "{:08x}".format(struct.unpack("<I", struct.pack(">I", hex_string))[0])
+
+
+def hex_get_bytes(hex_number, bytes_):
+    """."""
+    # TODO: implement
+    raise NotImplementedError('Sorry, this function isn\'t implemented yet')
+
+
+def number_to_words(number):
+    """Convert a number to its English representation (e.g. 100 => "One Hundred")."""
+    from democritus_strings.strings import _inflect_engine
+
+    return _inflect_engine().number_to_words(number)
+
+
+@arguments_as_decimals
+def number_to_scientific_notation(number):
+    """Convert the given number to scientific notation."""
+    precision = str(len(str(number)) + 1)
+    scientific_notation_number = f'{number:.{precision}E}'
+
+    # credits for the solution below to https://stackoverflow.com/a/6913576
+    return (
+        scientific_notation_number.split('E')[0].rstrip('0').rstrip('.')
+        + 'E'
+        + scientific_notation_number.split('E')[1]
+    )
+
+
+def number_to_engineering_notation(number):
+    """Convert the given number to engineering notation."""
+    import decimal
+
+    decimal_form = decimal.Decimal(number)
+    return decimal_form.normalize().to_eng_string()

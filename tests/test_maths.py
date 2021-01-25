@@ -46,6 +46,17 @@ from democritus_math import (
     fibonacci_sequence,
     expression_explore,
     prod,
+    hex_endiness_swap,
+    hex_get_bytes,
+    number_to_words,
+    enumerate_range,
+    number_to_scientific_notation,
+    number_to_engineering_notation,
+    number_is_even,
+    number_is_odd,
+    number_zero_pad,
+    is_number,
+    number_is_approx,
 )
 from democritus_math.maths import _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction, _base_converter_init
 
@@ -449,3 +460,98 @@ def test_transpose_docs_1():
     assert transpose([]) == None
     assert transpose([[]]) == None
     assert transpose([[1, 2], [3, 4]]) == [[1, 3], [2, 4]]
+
+
+def test_number_is_approx_1():
+    assert number_is_approx(1.199999, 1.2)
+    assert not number_is_approx(1.19999, 1.2)
+    assert not number_is_approx(1, 2)
+
+    assert number_is_approx(1.19999, 1.2, relative_tolerance=1e-5)
+    assert not number_is_approx(1.19999, 1.2, relative_tolerance=1e-10)
+
+    assert number_is_approx(1.1999, 1.2, relative_tolerance=1e-4)
+    assert number_is_approx(1.199, 1.2, relative_tolerance=1e-3)
+    assert number_is_approx(1.19, 1.2, relative_tolerance=1e-2)
+    assert number_is_approx(1.1, 1.2, relative_tolerance=1e-1)
+    assert number_is_approx(1, 2, relative_tolerance=1e-0)
+
+
+def test_is_number_1():
+    assert is_number(1)
+    assert is_number('1')
+    assert is_number(1.0)
+    assert is_number('1.02343024923')
+    assert is_number('-1.02343024923')
+
+    # TODO: is the test below expected? should I remove spaces on inputs?
+    assert not is_number('- 1.02343024923')
+    assert not is_number('foo')
+
+
+def test_number_zero_pad_1():
+    with pytest.raises(ValueError):
+        number_zero_pad(1, 0)
+
+    results = number_zero_pad(1, 1)
+    assert results == '1'
+
+    assert number_zero_pad(1, 2) == '01'
+    assert number_zero_pad(1.0, 2) == '01'
+    assert number_zero_pad('1', 2) == '01'
+
+    assert number_zero_pad('1', 5) == '00001'
+
+
+def test_number_is_even_1():
+    assert number_is_even(0) == True
+    assert number_is_even(1) == False
+    assert number_is_even(2) == True
+    assert number_is_even(3) == False
+
+
+def test_number_is_odd_1():
+    assert number_is_odd(-2) == False
+    assert number_is_odd(-1) == True
+    assert number_is_odd(0) == False
+    assert number_is_odd(1) == True
+    assert number_is_odd(2) == False
+    assert number_is_odd(3) == True
+
+
+def test_hex_endiness_swap_1():
+    assert hex_endiness_swap(0x12345678) == '78563412'
+
+
+def test_hex_get_bytes_1():
+    """."""
+    assert hex_get_bytes(0x12345678, 2) == 0x1234
+
+
+def test_number_to_words():
+    assert number_to_words(100) == 'one hundred'
+    assert number_to_words(1.1) == 'one point one'
+    assert number_to_words(1234) == 'one thousand, two hundred and thirty-four'
+
+
+def test_enumerate_range_1():
+    assert enumerate_range('0-2') == [0, 1, 2]
+    assert enumerate_range('0 - 2') == [0, 1, 2]
+    assert enumerate_range('27 - 35') == [27, 28, 29, 30, 31, 32, 33, 34, 35]
+
+    with pytest.raises(ValueError):
+        enumerate_range('foo')
+
+    with pytest.raises(ValueError):
+        enumerate_range('1-foo')
+
+
+def test_number_to_scientific_notation():
+    assert number_to_scientific_notation(79517805896) == '7.9517805896E+10'
+    assert number_to_scientific_notation('79517805896') == '7.9517805896E+10'
+    assert number_to_scientific_notation(795178.05896) == '7.9517805896E+05'
+
+
+def test_number_to_engineering_notation():
+    assert number_to_engineering_notation(10000000) == '10E+6'
+    assert number_to_engineering_notation('10000000') == '10E+6'
