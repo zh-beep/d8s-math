@@ -661,12 +661,6 @@ def hex_endiness_swap(hex_string):
     return "{:08x}".format(struct.unpack("<I", struct.pack(">I", hex_string))[0])
 
 
-def hex_get_bytes(hex_number, bytes_):
-    """."""
-    # TODO: implement
-    raise NotImplementedError('Sorry, this function isn\'t implemented yet')
-
-
 def number_to_words(number):
     """Convert a number to its English representation (e.g. 100 => "One Hundred")."""
     from democritus_strings.strings import _inflect_engine

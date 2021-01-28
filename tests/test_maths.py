@@ -47,7 +47,6 @@ from democritus_math import (
     expression_explore,
     prod,
     hex_endiness_swap,
-    hex_get_bytes,
     number_to_words,
     enumerate_range,
     number_to_scientific_notation,
@@ -524,11 +523,6 @@ def test_number_is_odd_1():
 
 def test_hex_endiness_swap_1():
     assert hex_endiness_swap(0x12345678) == '78563412'
-
-
-def test_hex_get_bytes_1():
-    """."""
-    assert hex_get_bytes(0x12345678, 2) == 0x1234
 
 
 def test_number_to_words():
