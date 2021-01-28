@@ -41,7 +41,7 @@ from democritus_math import (
     ratio,
     transpose,
     number_line,
-    integer_tuple,
+    IntegerTuple,
     fibonacci,
     fibonacci_sequence,
     expression_explore,
@@ -57,6 +57,9 @@ from democritus_math import (
     number_zero_pad,
     is_number,
     number_is_approx,
+    arguments_as_decimals,
+    first_arg_as_decimal,
+    string_to_number,
 )
 from democritus_math.maths import _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction, _base_converter_init
 
@@ -196,39 +199,39 @@ def test_combinations_with_replacement_docs_1():
 
 
 def test_decimal_to_base_docs_1():
-    assert decimal_to_base(3, 1) == integer_tuple(base=1, digits=(1, 1, 1))
-    assert decimal_to_base(3, 2) == integer_tuple(base=2, digits=(1, 1))
-    assert decimal_to_base(3, 3) == integer_tuple(base=3, digits=(1, 0))
-    assert decimal_to_base(3, 4) == integer_tuple(base=4, digits=(3,))
-    assert decimal_to_base(254, 256) == integer_tuple(base=256, digits=(254,))
-    assert decimal_to_base(255, 256) == integer_tuple(base=256, digits=(255,))
-    assert decimal_to_base(256, 256) == integer_tuple(base=256, digits=(1, 0))
-    assert decimal_to_base(257, 256) == integer_tuple(base=256, digits=(1, 1))
-    assert decimal_to_base(260, 256) == integer_tuple(base=256, digits=(1, 4))
-    assert decimal_to_base(12322322, 256) == integer_tuple(base=256, digits=(188, 6, 18))
-    assert decimal_to_base(65793, 256) == integer_tuple(base=256, digits=(1, 1, 1))
+    assert decimal_to_base(3, 1) == IntegerTuple(base=1, digits=(1, 1, 1))
+    assert decimal_to_base(3, 2) == IntegerTuple(base=2, digits=(1, 1))
+    assert decimal_to_base(3, 3) == IntegerTuple(base=3, digits=(1, 0))
+    assert decimal_to_base(3, 4) == IntegerTuple(base=4, digits=(3,))
+    assert decimal_to_base(254, 256) == IntegerTuple(base=256, digits=(254,))
+    assert decimal_to_base(255, 256) == IntegerTuple(base=256, digits=(255,))
+    assert decimal_to_base(256, 256) == IntegerTuple(base=256, digits=(1, 0))
+    assert decimal_to_base(257, 256) == IntegerTuple(base=256, digits=(1, 1))
+    assert decimal_to_base(260, 256) == IntegerTuple(base=256, digits=(1, 4))
+    assert decimal_to_base(12322322, 256) == IntegerTuple(base=256, digits=(188, 6, 18))
+    assert decimal_to_base(65793, 256) == IntegerTuple(base=256, digits=(1, 1, 1))
 
 
 def test_decimal_to_gray_code_docs_1():
-    assert decimal_to_gray_code(0) == integer_tuple(base=2, digits=(0,))
-    assert decimal_to_gray_code(1) == integer_tuple(base=2, digits=(1,))
-    assert decimal_to_gray_code(2) == integer_tuple(base=2, digits=(1, 1))
-    assert decimal_to_gray_code(3) == integer_tuple(base=2, digits=(1, 0))
-    assert decimal_to_gray_code(4) == integer_tuple(base=2, digits=(1, 1, 0))
-    assert decimal_to_gray_code(5) == integer_tuple(base=2, digits=(1, 1, 1))
-    assert decimal_to_gray_code(6) == integer_tuple(base=2, digits=(1, 0, 1))
-    assert decimal_to_gray_code(7) == integer_tuple(base=2, digits=(1, 0, 0))
-    assert decimal_to_gray_code(8) == integer_tuple(base=2, digits=(1, 1, 0, 0))
-    assert decimal_to_gray_code(9) == integer_tuple(base=2, digits=(1, 1, 0, 1))
-    assert decimal_to_gray_code(10) == integer_tuple(base=2, digits=(1, 1, 1, 1))
-    assert decimal_to_gray_code(11) == integer_tuple(base=2, digits=(1, 1, 1, 0))
-    assert decimal_to_gray_code(12) == integer_tuple(base=2, digits=(1, 0, 1, 0))
-    assert decimal_to_gray_code(13) == integer_tuple(base=2, digits=(1, 0, 1, 1))
-    assert decimal_to_gray_code(14) == integer_tuple(base=2, digits=(1, 0, 0, 1))
-    assert decimal_to_gray_code(15) == integer_tuple(base=2, digits=(1, 0, 0, 0))
-    assert decimal_to_gray_code('0') == integer_tuple(base=2, digits=(0,))
-    assert decimal_to_gray_code('1') == integer_tuple(base=2, digits=(1,))
-    assert decimal_to_gray_code(integer_tuple(base=10, digits=(2,))) == integer_tuple(base=2, digits=(1, 1))
+    assert decimal_to_gray_code(0) == IntegerTuple(base=2, digits=(0,))
+    assert decimal_to_gray_code(1) == IntegerTuple(base=2, digits=(1,))
+    assert decimal_to_gray_code(2) == IntegerTuple(base=2, digits=(1, 1))
+    assert decimal_to_gray_code(3) == IntegerTuple(base=2, digits=(1, 0))
+    assert decimal_to_gray_code(4) == IntegerTuple(base=2, digits=(1, 1, 0))
+    assert decimal_to_gray_code(5) == IntegerTuple(base=2, digits=(1, 1, 1))
+    assert decimal_to_gray_code(6) == IntegerTuple(base=2, digits=(1, 0, 1))
+    assert decimal_to_gray_code(7) == IntegerTuple(base=2, digits=(1, 0, 0))
+    assert decimal_to_gray_code(8) == IntegerTuple(base=2, digits=(1, 1, 0, 0))
+    assert decimal_to_gray_code(9) == IntegerTuple(base=2, digits=(1, 1, 0, 1))
+    assert decimal_to_gray_code(10) == IntegerTuple(base=2, digits=(1, 1, 1, 1))
+    assert decimal_to_gray_code(11) == IntegerTuple(base=2, digits=(1, 1, 1, 0))
+    assert decimal_to_gray_code(12) == IntegerTuple(base=2, digits=(1, 0, 1, 0))
+    assert decimal_to_gray_code(13) == IntegerTuple(base=2, digits=(1, 0, 1, 1))
+    assert decimal_to_gray_code(14) == IntegerTuple(base=2, digits=(1, 0, 0, 1))
+    assert decimal_to_gray_code(15) == IntegerTuple(base=2, digits=(1, 0, 0, 0))
+    assert decimal_to_gray_code('0') == IntegerTuple(base=2, digits=(0,))
+    assert decimal_to_gray_code('1') == IntegerTuple(base=2, digits=(1,))
+    assert decimal_to_gray_code(IntegerTuple(base=10, digits=(2,))) == IntegerTuple(base=2, digits=(1, 1))
 
 
 # def test_decimal_to_hex_docs_1():
@@ -295,8 +298,8 @@ def test_fraction_simplify_docs_1():
 
 
 def test_gray_code_to_decimal_docs_1():
-    assert gray_code_to_decimal(integer_tuple(base=2, digits=(1, 1))) == 2
-    assert gray_code_to_decimal(integer_tuple(base=2, digits=(1, 0, 0, 0))) == 15
+    assert gray_code_to_decimal(IntegerTuple(base=2, digits=(1, 1))) == 2
+    assert gray_code_to_decimal(IntegerTuple(base=2, digits=(1, 0, 0, 0))) == 15
 
 
 # def test_hex_to_decimal_docs_1():
@@ -311,13 +314,13 @@ def test_integer_to_decimal_docs_1():
 
 
 def test_integer_tuple_to_decimal_docs_1():
-    assert integer_tuple_to_decimal(integer_tuple(base=2, digits=(1, 1))) == 3
-    assert integer_tuple_to_decimal(integer_tuple(base=3, digits=(1, 1, 0, 1))) == 37
-    assert integer_tuple_to_decimal(integer_tuple(base=10, digits=(9, 0))) == 90
+    assert integer_tuple_to_decimal(IntegerTuple(base=2, digits=(1, 1))) == 3
+    assert integer_tuple_to_decimal(IntegerTuple(base=3, digits=(1, 1, 0, 1))) == 37
+    assert integer_tuple_to_decimal(IntegerTuple(base=10, digits=(9, 0))) == 90
 
 
 def test_is_integer_tuple_docs_1():
-    assert is_integer_tuple(integer_tuple(base=2, digits=(1, 1))) == True
+    assert is_integer_tuple(IntegerTuple(base=2, digits=(1, 1))) == True
     assert is_integer_tuple((1, 1)) == False
     assert is_integer_tuple(1) == False
 
@@ -555,3 +558,71 @@ def test_number_to_scientific_notation():
 def test_number_to_engineering_notation():
     assert number_to_engineering_notation(10000000) == '10E+6'
     assert number_to_engineering_notation('10000000') == '10E+6'
+
+
+@arguments_as_decimals
+def arguments_as_decimals_test_func(a):
+    return a
+
+
+def test_arguments_as_decimals_1():
+    result = arguments_as_decimals_test_func('1')
+    assert result == 1
+    assert isinstance(result, int)
+
+    result = arguments_as_decimals_test_func(1)
+    assert result == 1
+    assert isinstance(result, int)
+
+    result = arguments_as_decimals_test_func('1.123112')
+    assert result == 1.123112
+    assert isinstance(result, float)
+
+    result = arguments_as_decimals_test_func(1.123112)
+    assert result == 1.123112
+    assert isinstance(result, float)
+
+    result = arguments_as_decimals_test_func(IntegerTuple(base=2, digits=(1, 1)))
+    assert result == 3
+    assert isinstance(result, int)
+
+    result = arguments_as_decimals_test_func(IntegerTuple(base=3, digits=(1, 1, 0, 1)))
+    assert result == 37
+    assert isinstance(result, int)
+
+    result = arguments_as_decimals_test_func(IntegerTuple(base=10, digits=(2,)))
+    assert result == 2
+    assert isinstance(result, int)
+
+
+def test_string_to_number_docs_1():
+    assert string_to_number('1') == 1
+    assert string_to_number(1) == 1
+    assert string_to_number('2.0') == 2.0
+    assert string_to_number(2.0) == 2.0
+
+    with pytest.raises(RuntimeError):
+        assert string_to_number('foo')
+
+
+def test_string_to_number_docs_invalid_values():
+    with pytest.raises(RuntimeError):
+        string_to_number('foo')
+
+
+@first_arg_as_decimal
+def first_arg_as_decimal_test_func_a(a):
+    """."""
+    return a
+
+
+def test_first_arg_as_decimal_1():
+    assert first_arg_as_decimal_test_func_a('1') == 1
+    assert first_arg_as_decimal_test_func_a('1.123') == 1.123
+    assert first_arg_as_decimal_test_func_a(1) == 1
+    assert first_arg_as_decimal_test_func_a(1.123) == 1.123
+
+    with pytest.raises(RuntimeError):
+        first_arg_as_decimal_test_func_a('foo')
+
+    first_arg_as_decimal_test_func_a([1, '2', '3.14']) == [1, 2, 3.14]

@@ -1,17 +1,16 @@
 import collections
+import functools
 import math
 import numbers
 from typing import Any, Iterable, Tuple, List, Union, NamedTuple
 
-from .maths_temp_utils import arguments_as_decimals
 
-
-class integer_tupleType(NamedTuple):
+class integerTupleType(NamedTuple):
     base: int
     digits: Tuple[int, ...]
 
 
-StrOrNumberType = Union[str, int, float, integer_tupleType]
+StrOrNumberType = Union[str, int, float, integerTupleType]
 
 
 # TODO: write prime factorization function
@@ -29,7 +28,7 @@ StrOrNumberType = Union[str, int, float, integer_tupleType]
 #     # TODO: may want to write a function to standardize percentages (e.g. 0.1 and 10 and '10' and '10%')
 
 
-integer_tuple = collections.namedtuple('integer_tuple', ['base', 'digits'])
+IntegerTuple = collections.namedtuple('IntegerTuple', ['base', 'digits'])
 
 
 def fibonacci_sequence(n: int) -> List[int]:
@@ -134,7 +133,7 @@ def one_hot_encode(items: list, *, reverse: bool = False) -> List[list]:
 
 def is_integer_tuple(possible_integer_tuple: Any) -> bool:
     """."""
-    # I'm doing a more complex check rather than isinstance(possible_integer_tuple, integer_tuple) because I was unable to get it consistently working when this function was used in other files... the current check works consistently
+    # I'm doing a more complex check rather than isinstance(possible_integer_tuple, IntegerTuple) because I was unable to get it consistently working when this function was used in other files... the current check works consistently
     is_integer_tuple = (
         isinstance(possible_integer_tuple, tuple)
         and hasattr(possible_integer_tuple, 'base')
@@ -143,9 +142,61 @@ def is_integer_tuple(possible_integer_tuple: Any) -> bool:
     return is_integer_tuple
 
 
+def string_to_number(string: str) -> Union[int, float]:
+    """Convert a number as a string into either an integer or float."""
+    if not isinstance(string, str):
+        return string
+
+    try:
+        return int(string)
+    except ValueError:
+        try:
+            return float(string)
+        except ValueError:
+            message = f'Unable to convert {string} to a number.'
+            raise RuntimeError(message)
+
+
+def first_arg_as_decimal(func):
+    """Convert the first argument to a number (either integer or float)."""
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        first_arg = args[0]
+        other_args = args[1:]
+
+        first_arg = string_to_number(first_arg)
+
+        return func(first_arg, *other_args, **kwargs)
+
+    return wrapper
+
+
+def arguments_as_decimals(func):
+    """Convert all arguments to numbers (either integers or floats)."""
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        from democritus_strings import string_to_number
+        from .maths import is_integer_tuple, integer_tuple_to_decimal
+
+        new_args = []
+        for arg in args:
+            if isinstance(arg, str):
+                new_args.append(string_to_number(arg))
+            elif is_integer_tuple(arg):
+                decimal_arg = integer_tuple_to_decimal(arg)
+                new_args.append(decimal_arg)
+            else:
+                new_args.append(arg)
+        return func(*new_args, **kwargs)
+
+    return wrapper
+
+
 # TODO: make it more clear what values are expected as inputs to decimal_to_gray_code and gray_code_to_decimal -> decimal integers or binary?
 @arguments_as_decimals
-def decimal_to_gray_code(num: Union[str, int, float]) -> integer_tupleType:
+def decimal_to_gray_code(num: Union[str, int, float]) -> integerTupleType:
     """Convert the given number to a gray code. This function was inspired by the code here: https://en.wikipedia.org/wiki/Gray_code#Converting_to_and_from_Gray_code."""
     gray_code = num ^ (num >> 1)
     binary_gray_code = decimal_to_base(gray_code, 2)
@@ -154,7 +205,7 @@ def decimal_to_gray_code(num: Union[str, int, float]) -> integer_tupleType:
 
 # TODO: should this function only take an integer tuple and not a string (e.g. '111') or int which will be intepreted as binary (e.g. 111)
 @arguments_as_decimals
-def gray_code_to_decimal(num: integer_tupleType) -> int:
+def gray_code_to_decimal(num: integerTupleType) -> int:
     """Convert the given number to a gray code. This function was inspired by the code here: https://en.wikipedia.org/wiki/Gray_code#Converting_to_and_from_Gray_code."""
     mask = num >> 1
     while mask != 0:
@@ -192,7 +243,7 @@ def decimal_to_roman_numeral(decimal_number) -> str:
 # TODO: need to test integer_tuple_to_decimal functions on negative numbers (use hypothesis - it would be nice to have functions to generate examples of different types of numbers)
 
 
-def integer_tuple_to_decimal(integer_tuple: integer_tupleType) -> int:
+def integer_tuple_to_decimal(integer_tuple: integerTupleType) -> int:
     """Return the decimal form of the given number (represented as an integer tuple)."""
     decimal_number = 0
 
@@ -225,7 +276,7 @@ def decimal_to_base(decimal_number: Union[str, int, float], base: int):
     """Convert the decimal_number to the given base."""
     if base == 1:
         results = [1 for i in range(0, decimal_number)]
-        new_integer = integer_tuple(base=base, digits=tuple(results))
+        new_integer = IntegerTuple(base=base, digits=tuple(results))
         return new_integer
 
     results = []
@@ -239,7 +290,7 @@ def decimal_to_base(decimal_number: Union[str, int, float], base: int):
         results.append(floor_divided_value)
     results.append(decimal_number % base)
 
-    new_integer = integer_tuple(base=base, digits=tuple(results))
+    new_integer = IntegerTuple(base=base, digits=tuple(results))
     return new_integer
 
 
