@@ -177,7 +177,6 @@ def arguments_as_decimals(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        from democritus_strings import string_to_number
         from .maths import is_integer_tuple, integer_tuple_to_decimal
 
         new_args = []
@@ -410,8 +409,6 @@ def prod(iterable):
     """Get the product of the iterable."""
     from functools import reduce
     import operator
-
-    from democritus_strings import string_to_number
 
     # convert all of the items of the iterable to numbers
     number_iterable = map(string_to_number, iterable)
