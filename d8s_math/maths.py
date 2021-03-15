@@ -165,7 +165,10 @@ def first_arg_as_decimal(func):
         first_arg = args[0]
         other_args = args[1:]
 
-        first_arg = string_to_number(first_arg)
+        if isinstance(first_arg, str):
+            first_arg = string_to_number(first_arg)
+        elif is_integer_tuple(first_arg):
+            first_arg = integer_tuple_to_decimal(first_arg)
 
         return func(first_arg, *other_args, **kwargs)
 

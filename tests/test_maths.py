@@ -1,6 +1,6 @@
 import pytest
 
-from democritus_math import (
+from d8s_math import (
     number_closest,
     number_furthest,
     cartesian_product,
@@ -60,7 +60,7 @@ from democritus_math import (
     first_arg_as_decimal,
     string_to_number,
 )
-from democritus_math.maths import _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction, _base_converter_init
+from d8s_math.maths import _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction, _base_converter_init
 
 # from democritus_numbers import number_is_approx
 
