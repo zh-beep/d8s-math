@@ -663,7 +663,7 @@ def hex_endiness_swap(hex_string):
 
 def number_to_words(number):
     """Convert a number to its English representation (e.g. 100 => "One Hundred")."""
-    from democritus_strings.strings import _inflect_engine
+    from d8s_strings.strings import _inflect_engine
 
     return _inflect_engine().number_to_words(number)
 

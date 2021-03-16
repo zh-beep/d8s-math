@@ -62,7 +62,7 @@ from d8s_math import (
 )
 from d8s_math.maths import _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction, _base_converter_init
 
-# from democritus_numbers import number_is_approx
+# from d8s_numbers import number_is_approx
 
 x = sympy_symbol('x')
 y = sympy_symbol('y')
