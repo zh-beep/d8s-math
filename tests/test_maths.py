@@ -1,71 +1,93 @@
+from contextlib import contextmanager
+
 import pytest
 
 from d8s_math import (
-    number_closest,
-    number_furthest,
+    IntegerTuple,
+    arguments_as_decimals,
     cartesian_product,
-    sympy_symbol,
-    equation_solve,
-    one_cold_encode,
-    one_hot_encode,
-    is_integer_tuple,
-    decimal_to_gray_code,
-    gray_code_to_decimal,
-    decimal_to_hex,
-    hex_to_decimal,
-    roman_numeral_to_decimal,
-    decimal_to_roman_numeral,
-    integer_tuple_to_decimal,
-    integer_to_decimal,
-    decimal_to_base,
-    outer_division,
-    outer_product,
-    multiplication_table,
-    number_evenly_divides,
-    number_evenly_divided_by,
-    fraction_examples,
-    iterable_differences,
+    ceiling,
     combinations,
     combinations_with_replacement,
-    permutations,
-    fraction_simplify,
-    remainder,
-    floor,
-    ceiling,
-    factorial,
-    fraction_complex_to_mixed_fraction,
-    fraction_mixed_to_complex_fraction,
+    decimal_to_base,
+    decimal_to_gray_code,
+    decimal_to_hex,
+    decimal_to_roman_numeral,
     dot_product,
-    percent,
-    gcd,
-    ratio,
-    transpose,
-    number_line,
-    IntegerTuple,
+    enumerate_range,
+    equation_solve,
+    expression_explore,
+    factorial,
     fibonacci,
     fibonacci_sequence,
-    expression_explore,
-    prod,
+    first_arg_as_decimal,
+    floor,
+    fraction_complex_to_mixed_fraction,
+    fraction_examples,
+    fraction_mixed_to_complex_fraction,
+    fraction_simplify,
+    gcd,
+    gray_code_to_decimal,
     hex_endiness_swap,
-    number_to_words,
-    enumerate_range,
-    number_to_scientific_notation,
-    number_to_engineering_notation,
+    hex_to_decimal,
+    integer_to_decimal,
+    integer_tuple_to_decimal,
+    is_integer_tuple,
+    is_number,
+    iterable_differences,
+    multiplication_table,
+    number_closest,
+    number_evenly_divided_by,
+    number_evenly_divides,
+    number_furthest,
+    number_is_approx,
     number_is_even,
     number_is_odd,
+    number_line,
+    number_to_engineering_notation,
+    number_to_scientific_notation,
+    number_to_words,
     number_zero_pad,
-    is_number,
-    number_is_approx,
-    arguments_as_decimals,
-    first_arg_as_decimal,
+    one_cold_encode,
+    one_hot_encode,
+    outer_division,
+    outer_product,
+    percent,
+    percent_change,
+    permutations,
+    prod,
+    ratio,
+    remainder,
+    roman_numeral_to_decimal,
     string_to_number,
+    sympy_symbol,
+    transpose,
 )
-from d8s_math.maths import _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction, _base_converter_init
+from d8s_math.maths import _base_converter_init, _hot_or_cold_encoder, _split_fraction, _split_mixed_fraction
 
 # from d8s_numbers import number_is_approx
 
 x = sympy_symbol('x')
 y = sympy_symbol('y')
+
+
+@contextmanager
+def does_not_raise():
+    yield
+
+
+@pytest.mark.parametrize(
+    "old,new,expected,possible_exception",
+    [
+        (2, 10, 400, does_not_raise()),
+        (12, 60, 400, does_not_raise()),
+        (0, 12, 0, pytest.raises(ZeroDivisionError)),
+        (12, 0, -100, does_not_raise()),
+    ],
+)
+def test_percent_change__docs_1(old, new, expected, possible_exception):
+    with possible_exception:
+        assert percent_change(old, new) == expected
 
 
 def test_expression_explore_docs_1():
