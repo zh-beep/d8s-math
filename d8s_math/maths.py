@@ -694,9 +694,12 @@ def number_to_engineering_notation(number):
 def hex_get_bytes(hex_number, number_of_bytes):
     length = len(hex(hex_number)) - 2
     hex_num_bytes = length/2
+    # print(type(hex_num_bytes))
+    # print(type(number_of_bytes))
+    # print(hex_num_bytes - number_of_bytes)
     if ((hex_num_bytes < number_of_bytes) or (hex_num_bytes == number_of_bytes)):
-        return '0'
+        return hex(hex_number)
     else:
-        hex_number = hex_number >> (8*number_of_bytes)
+        hex_number = hex_number >> math.floor((8*(hex_num_bytes - number_of_bytes)))
         final_hex = hex(hex_number) 
         return final_hex 
