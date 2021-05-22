@@ -260,6 +260,10 @@ Once imported, you can use any of the functions listed below.
     def number_to_engineering_notation(number):
         """Convert the given number to engineering notation."""
     ```
+  - ```python
+    def hex_get_bytes(hex_number, number_of_bytes):
+        """Reduce a hex number number to a specific number of bytes. For example, (0x123456,2) returns '0x1234'."""
+    ```
 
 ## Development
 
