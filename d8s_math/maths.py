@@ -689,7 +689,7 @@ def number_to_engineering_notation(number):
     decimal_form = decimal.Decimal(number)
     return decimal_form.normalize().to_eng_string()
 
-def hex_get_bytes(hex_number,number_of_bytes):
+def hex_get_bytes(hex_number, number_of_bytes):
     length = len(hex(hex_number)) - 2
     hex_num_bytes = length/2
     if ((hex_num_bytes < number_of_bytes) or (hex_num_bytes == number_of_bytes)):
@@ -699,4 +699,3 @@ def hex_get_bytes(hex_number,number_of_bytes):
         hex_number = hex_number >> (8*number_of_bytes)
         final_hex = hex(hex_number) 
         return final_hex 
-
