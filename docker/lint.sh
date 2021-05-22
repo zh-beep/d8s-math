@@ -8,7 +8,7 @@ isort d8s_math/ tests/
 
 black d8s_math/ tests/
 
-mypy d8s_math/ tests/
+# mypy d8s_math/ tests/
 
 pylint --fail-under 9 d8s_math/*.py
 

@@ -2,7 +2,7 @@ import collections
 import functools
 import math
 import numbers
-from typing import Any, Iterable, Tuple, List, Union, NamedTuple
+from typing import Any, Iterable, List, NamedTuple, Tuple, Union
 
 
 class integerTupleType(NamedTuple):
@@ -180,7 +180,7 @@ def arguments_as_decimals(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        from .maths import is_integer_tuple, integer_tuple_to_decimal
+        from .maths import integer_tuple_to_decimal, is_integer_tuple
 
         new_args = []
         for arg in args:
@@ -358,7 +358,6 @@ def number_evenly_divided_by(a, b):
 def fraction_examples(n=10, *, fractions_as_strings: bool = True):
     """Create n fractions."""
     from hypothesis.strategies import fractions
-
     from hypothesis_data import hypothesis_get_strategy_results
 
     fraction_object_examples = hypothesis_get_strategy_results(fractions, n=n)
@@ -410,8 +409,8 @@ def combinations_with_replacement(iterable, length=None):
 
 def prod(iterable):
     """Get the product of the iterable."""
-    from functools import reduce
     import operator
+    from functools import reduce
 
     # convert all of the items of the iterable to numbers
     number_iterable = map(string_to_number, iterable)
@@ -523,11 +522,14 @@ def dot_product(item_a, item_b):
 
 def percent(ratio):
     """Return the ratio as a percentage."""
-    if ratio <= 1 and ratio >= 0:
-        return round(ratio * 100, 2)
-    else:
-        # TODO: not sure what to do here
-        raise RuntimeError
+    return round(ratio * 100, 2)
+
+
+def percent_change(old_value: StrOrNumberType, new_value: StrOrNumberType) -> float:
+    """Return the change from the old_value to the new_value (as a percent of the old_value)."""
+    difference = new_value - old_value
+    diff_as_ratio = difference / old_value
+    return percent(diff_as_ratio)
 
 
 @arguments_as_decimals
